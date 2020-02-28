@@ -521,6 +521,7 @@ static int get_fd_info(struct process_info *p, int dir,
 {
 	int err;
 	ssize_t bytes;
+	char tmp[PATH_MAX];
 
 	err = xatoi(process_fd, &fdi->process_fd);
 	if (err) {
@@ -528,8 +529,8 @@ static int get_fd_info(struct process_info *p, int dir,
 		return err;
 	}
 
-	snprintf(fdi->path, PATH_MAX, "/proc/%d/fd/%d", p->pid, fdi->process_fd);
-	bytes = readlink(fdi->path, fdi->path, PATH_MAX - 1);
+	snprintf(tmp, PATH_MAX, "/proc/%d/fd/%d", p->pid, fdi->process_fd);
+	bytes = readlink(tmp, fdi->path, PATH_MAX - 1);
 	if (bytes < 0) {
 		pr_perror("failed to read link %s\n", fdi->path);
 		err = -errno;
@@ -558,8 +559,8 @@ static int get_fd_info(struct process_info *p, int dir,
 	}
 
 	if (S_ISSOCK(fdi->st.st_mode)) {
-		snprintf(fdi->cwd, PATH_MAX, "/proc/%d/cwd", p->pid);
-		bytes = readlink(fdi->cwd, fdi->cwd, PATH_MAX - 1);
+		snprintf(tmp, PATH_MAX, "/proc/%d/cwd", p->pid);
+		bytes = readlink(tmp, fdi->cwd, PATH_MAX - 1);
 		if (bytes < 0) {
 			pr_perror("failed to read link %s\n", fdi->cwd);
 			err = -errno;

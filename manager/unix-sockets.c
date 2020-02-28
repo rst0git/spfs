@@ -786,9 +786,10 @@ static int set_cwd(const char *cwd, char *cur_cwd, size_t size)
 
 	if (cur_cwd) {
 		ssize_t bytes;
+		char tmp[PATH_MAX];
 
-		snprintf(cur_cwd, size, "/proc/%d/cwd", getpid());
-		bytes = readlink(cur_cwd, cur_cwd, size - 1);
+		snprintf(tmp, size, "/proc/%d/cwd", getpid());
+		bytes = readlink(tmp, cur_cwd, size - 1);
 		if (bytes < 0) {
 			pr_perror("failed to read link %s\n", cur_cwd);
 			return -errno;
