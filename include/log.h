@@ -10,11 +10,6 @@
 #include <string.h>
 #include <stdbool.h>
 
-static inline pid_t gettid(void)
-{
-	return syscall(SYS_gettid);
-}
-
 extern const char *__progname;
 
 int print_on_level(unsigned int loglevel, const char *format, ...);
